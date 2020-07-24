@@ -35,9 +35,10 @@ namespace GiftCardService.Controllers
                 }
                 else
                 {
-                    results = (from s in Stores
-                               where s.Name == search
-                               select s).ToList();
+                    string[] searchTerms = search.ToLower().Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    results = (from str in Stores
+                               where searchTerms.All(s => str.Name.ToLower().IndexOf(s) > -1)
+                               select str).ToList();
                 }
             }
             else
@@ -143,7 +144,21 @@ namespace GiftCardService.Controllers
             };
             Stores.Add(s);
 
+            //Not real store here, testing keyword search
+            s = new Store
+            {
+                Name = "The Test Lab",
+                PhoneNumber = "(540) 251-5362",
+                ZipCode = 24073
+            };
+            Stores.Add(s);
 
+            s = new Store
+            {
+                Name = "College Automotive Care Inc",
+                PhoneNumber = "(540) 605-9657",
+                ZipCode = 24060
+            };
         }
     }
 }
